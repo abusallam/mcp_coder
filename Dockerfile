@@ -10,6 +10,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY ./app /app
+ENV PYTHONPATH=/app
 # Expose FastAPI's port
 EXPOSE 8000
 # Run the FastAPI app with Uvicorn
