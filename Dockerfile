@@ -9,9 +9,9 @@ RUN curl -sSL https://github.com/aider-ai/aider/releases/download/v0.1.2/aider-l
 COPY requirements.txt . 
 RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
-COPY ./app /app/app
+COPY ./app /app
 ENV PYTHONPATH=/app
 # Expose FastAPI's port
 EXPOSE 8000
 # Run the FastAPI app with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "/app/app"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "/app"]
