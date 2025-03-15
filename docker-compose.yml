@@ -4,11 +4,13 @@ services:
     build: .
     container_name: mcp-server
     ports:
-      - "8945:8000"
+      - "0:8000"
     env_file:
       - .env
     volumes:
       - ./app:/app
+    environment:
+      - PYTHONPATH=/app
     networks:
       - mcp-network
 
