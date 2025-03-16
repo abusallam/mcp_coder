@@ -1,0 +1,20 @@
+feat(mcp): 
+
+# Title: Summary, imperative, start upper case, don't end with period
+# No more than 50 chars. #### 50 chars is here: #
+
+# Body: Explain *what* and *why* (not *how*). Include task ID (Jira issue).
+# Wrap at 72 chars. ################################## which is here: #
+
+# At-least 1 paragraph of description
+# Include task ID (Jira issue / Github issue)
+# Include any breaking changes
+# Include any relevant links
+
+# BREAKING CHANGE: (if any)
+
+# Implements: (task ids)
+# Related to: (task ids)
+# Documentation: (links)
+
+# --- COMMIT END ---

@@ -1,32 +1,59 @@
-from abc import ABC, abstractmethod
+from app.core.env_model import env
+from app.core.exceptions import AIProviderError
 from typing import Dict, Any
-import aiohttp
-import os
+import asyncio
 
-class AIProvider(ABC):
-    @abstractmethod
-    async def execute_command(self, command: str, params: str) -> Dict[str, Any]:
-        pass
-
-class AiderProvider(AIProvider):
-    def __init__(self, aider_path: str):
-        self.aider_path = aider_path
-
-    async def execute_command(self, command: str, params: str) -> Dict[str, Any]:
-        try:
-            from app.helpers import execute_aider_command
-            result = await execute_aider_command(command, params)
-            return {"success": True, "data": result}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-
-class AIService:
+class AiderService:
+    """Aider-based MCP service for code operations"""
+    
     def __init__(self):
-        self.providers = {
-            "aider": AiderProvider(os.getenv("AIDER_PATH", "/usr/local/bin/aider")),
+        self.config = {
+            "path": env.AIDER_PATH,
+            "model": env.AIDER_MODEL,
+            "temperature": env.AIDER_TEMPERATURE,
+            "max_tokens": env.AIDER_MAX_TOKENS,
+            "api_key": env.AIDER_API_KEY,
+            "user": env.AIDER_USER,
+            "password": env.AIDER_PASSWORD,
+            "permissions": env.AIDER_PERMISSIONS
         }
+        self._authenticate()
 
-    async def execute(self, provider: str, command: str, params: str) -> Dict[str, Any]:
-        if provider not in self.providers:
-            raise ValueError(f"Unknown AI provider: {provider}")
-        return await self.providers[provider].execute_command(command, params)
+    def _authenticate(self):
+        """Authenticate Aider user"""
+        cmd = [
+            self.config["path"],
+            "--auth",
+            "--user", self.config["user"],
+            "--password", self.config["password"]
+        ]
+        # Authentication logic here
+
+    async def execute(self, command: str, params: str) -> Dict[str, Any]:
+        """Execute Aider command"""
+        cmd = [
+            self.config["path"],
+            "--model", self.config["model"],
+            "--temperature", str(self.config["temperature"]),
+            command,
+            params
+        ]
+        
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            
+            if process.returncode != 0:
+                raise AIProviderError(f"Aider command failed: {stderr.decode()}")
+                
+            return {
+                "success": True,
+                "data": stdout.decode(),
+                "command": command
+            }
+        except Exception as e:
+            raise AIProviderError(f"Aider execution failed: {str(e)}")

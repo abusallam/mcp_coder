@@ -1,6 +1,53 @@
-# MCP Server - Aider-Powered Code Agent
+# MCP Server (Model Control Present)
 
-This project provides an **MCP-based coding agent** that integrates with **Aider** for remote code editing and execution. The system supports all essential Aider commands like `/run`, `/add`, `/read`, and more via an API.
+AI-powered code management server supporting multiple AI providers including Aider, Gemini, and Sonnet.
+
+## Quick Start
+
+1. Clone the repository
+2. Copy `.env.example` to `.env` and configure variables
+3. Run with Docker:
+```bash
+docker-compose up -d
+```
+
+## Configuration
+
+Configure AI providers in `.env`:
+- Aider: OpenAI-based code assistance
+- Gemini: Google's AI model
+- Sonnet: Custom AI provider
+
+## Deployment
+
+### Prerequisites
+- Python 3.9+
+- Docker and Docker Compose
+- Valid API keys for chosen AI providers
+
+### Manual Deployment
+```bash
+# 1. Set up environment
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Configure environment
+cp .env.example .env
+# Edit .env with your settings
+
+# 3. Start the application
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+### Health Monitoring
+- Health check endpoint: `/api/v1/health`
+- Metrics: `/api/v1/metrics`
+- Logs: Check Docker logs or application logs in `/var/log/mcp-server/`
+
+## API Documentation
+- OpenAPI docs: `/api/docs`
+- ReDoc: `/api/redoc`
 
 ## Features
 
