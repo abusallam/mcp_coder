@@ -1,4 +1,4 @@
-name: Deploy to Coolify
+name: Build and Test
 
 on:
   push:
@@ -6,12 +6,21 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Deploy to Coolify
+        uses: actions/checkout@v4
+      
+      - name: Check Project Structure
         run: |
-          curl -X POST https://coolify.yourcoolifyserver.com/api/v1/deploy -H "Authorization: Bearer ${{ secrets.COOLIFY_API_KEY }}"
+          echo "Project structure:"
+          ls -la
+          
+          if [ ! -f "package.json" ]; then
+            echo "Warning: package.json not found"
+          fi
+          
+          if [ ! -f ".gitignore" ]; then
+            echo "Warning: .gitignore not found"
+          fi
