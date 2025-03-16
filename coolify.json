@@ -1,0 +1,12 @@
+{
+  "name": "mcp-server",
+  "type": "docker",
+  "buildPack": "python",
+  "dockerCompose": true,
+  "autodeploy": true,
+  "branch": "main",
+  "deploymentType": "docker-compose",
+  "deploymentPath": "/",
+  "pythonVersion": "3.9",
+  "port": 8000
+}

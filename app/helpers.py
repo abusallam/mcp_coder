@@ -13,13 +13,30 @@ AIDER_COMMANDS = [
     "/generate", "/test", "/clean", "/document"
 ]
 
+import shlex
+
 def execute_aider_command(command, params):
+    """
+    Executes an Aider command with the given parameters.
+
+    Args:
+        command (str): The Aider command to execute.
+        params (str): The parameters to pass to the Aider command.
+
+    Returns:
+        str: The output of the Aider command.
+
+    Raises:
+        ValueError: If the command is unsupported or if the Aider execution fails.
+    """
     if command not in AIDER_COMMANDS:
         raise ValueError(f"Unsupported command: {command}")
 
     try:
+        # Use shlex.split to properly quote arguments, preventing issues with spaces or special characters
+        command_list = [AIDER_PATH, command] + shlex.split(params)
         result = subprocess.run(
-            [AIDER_PATH, command, params],
+            command_list,
             capture_output=True,
             text=True,
             check=True
