@@ -42,7 +42,7 @@ class AiderCommand(BaseModel):
 
     @validator("command")
     def validate_command(cls, command):
-        allowed_commands = ["aider", "git"]  # Example whitelist
+        allowed_commands = ["/run", "/add", "/read", "/fix", "/improve", "/explain", "/generate", "/test", "/clean", "/document"]
         if command not in allowed_commands:
             raise ValueError(f"Command '{command}' is not allowed.")
         return command
